@@ -1,21 +1,19 @@
 const { Router } = require('express');
 const ErrorResponse = require('../classes/error-response');
 const ToDo = require('../dataBase/models/ToDo.model');
-const User = require('../dataBase/models/User.model');
-const Token = require('../dataBase/models/Token.model');
-const { asyncHandler } = require('../middlewares/middlewares');
+const { asyncHandler, requireToken } = require('../middlewares/middlewares');
 
 const router = Router();
 
 function initRoutes() {
-    router.get('/', asyncHandler(getToDo));
-    router.get('/:id', asyncHandler(getToDoById));
-    router.post('/', asyncHandler(createToDo));
-    router.patch('/:id', asyncHandler(patchToDoById));
-    router.delete('/:id', asyncHandler(deleteToDoById));
-    router.delete('/', asyncHandler(deleteAllToDo));
-    
+    router.get('/', asyncHandler(requireToken), asyncHandler(getToDo));
+    router.get('/:id', asyncHandler(requireToken), asyncHandler(getToDoById));
+    router.post('/', asyncHandler(requireToken), asyncHandler(createToDo));
+    router.patch('/:id', asyncHandler(requireToken), asyncHandler(patchToDoById));
+    router.delete('/:id', asyncHandler(requireToken), asyncHandler(deleteToDoById));
+    router.delete('/', asyncHandler(requireToken), asyncHandler(deleteAllToDo));
 }
+// добавить промежуточный обработчик на проверку токена
 
 async function getToDo(req, res, next) {
     const todo = await ToDo.findAll();
@@ -26,7 +24,7 @@ async function getToDo(req, res, next) {
 async function getToDoById(req, res, next) {
     const todo = await ToDo.findByPk(req.params.id);
 
-    if (!todo) {throw new ErrorResponse('No todo found', 404); }
+    if (!todo) { throw new ErrorResponse('No todo found', 404); }
 
     res.status(200).json(todo);
 }
@@ -44,7 +42,7 @@ async function patchToDoById(req, res, next) {
         where: { id: req.params.id }
     },
     )
-    res.status(200).json( todo );
+    res.status(200).json(todo);
 }
 
 async function deleteAllToDo(req, res, next) {

@@ -28,18 +28,19 @@ const errorHandler = (err, _req, res, _next) => {
 
 const requireToken = async (req, _res, next) => {
     const token = req.header("token");
-  
+    if (!token) throw new ErrorResponse("Token undefinded", 404);
+    //+ проверка
     let tokenFind = await Token.findOne({
-      where: {
-        value: token,
-      },
+        where: {
+            value: token,
+        },
     });
-  
-    if (!tokenFind) {throw new ErrorResponse("Wrong token", 403);}
-  
+
+    if (!tokenFind) { throw new ErrorResponse("Wrong token", 403); }
+
     req.userId = tokenFind.userId;
     next();
-  };
+};
 //  const requireToken = async(req, _res, next)=>{
 //     let token = await Token.findOne({
 //         where:{value: req.headers.token}, 

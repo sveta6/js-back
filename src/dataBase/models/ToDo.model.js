@@ -16,7 +16,7 @@ ToDo.init(
         },
         description: {
             type: Sequelize.STRING,
-            defaultValue: 0,
+            defaultValue: "",
         },
         isCompleted: {
             type: Sequelize.BOOLEAN,

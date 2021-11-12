@@ -12,10 +12,10 @@ User.init(
             primaryKey: true,
             defaultValue: Sequelize.DataTypes.UUIDV4,
         },
-        userId: {
-            type: Sequelize.DataTypes.UUID,
-            defaultValue: Sequelize.DataTypes.UUIDV4,
-        },
+        // userId: {
+        //     type: Sequelize.DataTypes.UUID,
+        //     defaultValue: Sequelize.DataTypes.UUIDV4,
+        // },
         login: {
             type: Sequelize.STRING,
             allowNull: null,
@@ -29,10 +29,6 @@ User.init(
             allowNull: false,
             defaultValue: 'seva@puk.com' ,
         },
-        password: {
-            type: Sequelize.STRING,
-            allowNull: false,
-        },
         name: {
             type: Sequelize.STRING,
             allowNull: false,
@@ -40,6 +36,11 @@ User.init(
     },
     { sequelize: sequelize, underscored: true, modelName: "user" }
 );
+
+//2 связи
 User.hasMany(Token);
 ToDo.belongsTo(User, { foreignKey: "userId" });
+User.hasMany(ToDo);
+ToDo.belongsTo(User, { foreignKey: "userId" });
+
 module.exports = User;

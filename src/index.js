@@ -2,11 +2,10 @@
 const express = require('express');
 const http = require('http');
 const cors = require('cors');
-const apiAuthRouter = require('./controllers/apiAuth.controller');
-const apiToDosRouter = require('./controllers/apiToDos.controller');
-const apiUserRouter = require('./controllers/apiUser.controller');
-const { notFound, errorHandler, asyncHandler } = require('./middlewares/middlewares');
-
+const apiAuthRouter = require('./controllers/api-auth.controller');
+const apiToDosRouter = require('./controllers/api-toDos.controller');
+const apiUserRouter = require('./controllers/api-user.controller');
+const { notFound, errorHandler} = require('./middlewares/middlewares');
 const { initDB } = require('./dataBase');
 
 //Init zone
@@ -34,6 +33,7 @@ app.use((req, res, next) => {
 app.use('/api/auth', apiAuthRouter);
 app.use('/api/todo', apiToDosRouter);
 app.use('/api/users', apiUserRouter);
+
 app.use(notFound);
 app.use(errorHandler);
 
