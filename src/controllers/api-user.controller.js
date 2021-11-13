@@ -3,7 +3,6 @@ const User = require('../dataBase/models/User.model');
 const Token = require('../dataBase/models/Token.model');
 const { asyncHandler, requireToken } = require("../middlewares/middlewares");
 
-
 const router = Router();
 
 function initRoutes() {
@@ -32,14 +31,12 @@ async function updateInfo(req, res, _next) {
 async function logout(req, res, _next) {
     await Token.destroy({
         where: {
-            value: req.headers.token,
+            value: req.header("token"),
         },
     });
 
     res.status(200).json({ message: "Logged out" });
 }
-
-
 
 initRoutes();
 

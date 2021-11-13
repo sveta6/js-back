@@ -37,7 +37,6 @@ User.init(
     { sequelize: sequelize, underscored: true, modelName: "user" }
 );
 
-//2 связи
 User.hasMany(Token);
 ToDo.belongsTo(User, { foreignKey: "userId" });
 User.hasMany(ToDo);

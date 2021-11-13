@@ -29,7 +29,6 @@ const errorHandler = (err, _req, res, _next) => {
 const requireToken = async (req, _res, next) => {
     const token = req.header("token");
     if (!token) throw new ErrorResponse("Token undefinded", 404);
-    //+ проверка
     let tokenFind = await Token.findOne({
         where: {
             value: token,
