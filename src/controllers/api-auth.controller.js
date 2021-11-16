@@ -8,6 +8,11 @@ const { nanoid } = require("nanoid");
 
 const router = Router();
 
+function initRoutes() {
+    router.post('/registration', asyncHandler(registration));
+    router.post('/login', asyncHandler(login));
+}
+
 async function registration(req, res, next) {
     let user = await User.findOne({
         where: {
@@ -40,11 +45,6 @@ async function login(req, res, next) {
     res.status(200).json({
         accessToken: token.value,
     });
-}
-
-function initRoutes() {
-    router.post('/registration', asyncHandler(registration));
-    router.post('/login', asyncHandler(login));
 }
 
 initRoutes();

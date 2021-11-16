@@ -13,7 +13,7 @@ function initRoutes() {
     router.delete('/:id', asyncHandler(requireToken), asyncHandler(deleteToDoById));
     router.delete('/', asyncHandler(requireToken), asyncHandler(deleteAllToDo));
 }
-//фильтрация по юзер айди
+
 async function getToDo(req, res, next) {
     const todos = await ToDo.findAll({
         where: {
@@ -58,10 +58,9 @@ async function patchToDoById(req, res, next) {
 }
 
 async function deleteAllToDo(req, res, next) {
-    const todos = await ToDo.findAll({
-            userId: req.userId,
+    await ToDo.destroy({
+        where: { userId: req.userId }
     });
-    await todos.destroy();
     res.status(200).json({ message: "All deleted" });
 }
 async function deleteToDoById(req, res, next) {
@@ -74,6 +73,7 @@ async function deleteToDoById(req, res, next) {
     await todo.destroy();
     res.status(200).json({ message: "Deleted by ID" });
 }
+
 initRoutes();
 
 module.exports = router;
