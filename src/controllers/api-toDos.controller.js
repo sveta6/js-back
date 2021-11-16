@@ -15,13 +15,22 @@ function initRoutes() {
 }
 //фильтрация по юзер айди
 async function getToDo(req, res, next) {
-    const todos = await ToDo.findAll();
+    const todos = await ToDo.findAll({
+        where: {
+            userId: req.userId,
+        },
+    });
 
     res.status(200).json({ todos });
 }
 
 async function getToDoById(req, res, next) {
-    const todo = await ToDo.findByPk(req.params.id);
+    const todo = await ToDo.findByPk({
+        where: {
+            id: req.params.id,
+            userId: req.userId,
+        },
+    });
 
     if (!todo) { throw new ErrorResponse('No todo found', 404); }
 
@@ -30,7 +39,8 @@ async function getToDoById(req, res, next) {
 
 async function createToDo(req, res, next) {
     const todo = await ToDo.create({
-        ...req.body
+        ...req.body,
+        userId: req.userId,
     });
 
     res.status(200).json(todo);
@@ -38,22 +48,29 @@ async function createToDo(req, res, next) {
 
 async function patchToDoById(req, res, next) {
     const todo = await ToDo.update({
-        where: { id: req.params.id }
+        where: {
+            id: req.params.id,
+            userId: req.userId,
+        }
     },
     )
     res.status(200).json(todo);
 }
 
 async function deleteAllToDo(req, res, next) {
-    await ToDo.destroy({
-        where: { id: req.userId }
-    },
-    )
+    const todos = await ToDo.findAll({
+            userId: req.userId,
+    });
+    await todos.destroy();
     res.status(200).json({ message: "All deleted" });
 }
 async function deleteToDoById(req, res, next) {
-    let id = req.params.id;
-    let todo = await ToDo.findByPk(id);
+    const todo = await ToDo.findByPk({
+        where: {
+            id: req.params.id,
+            userId: req.userId,
+        },
+    });
     await todo.destroy();
     res.status(200).json({ message: "Deleted by ID" });
 }

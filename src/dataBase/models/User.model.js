@@ -12,10 +12,6 @@ User.init(
             primaryKey: true,
             defaultValue: Sequelize.DataTypes.UUIDV4,
         },
-        // userId: {
-        //     type: Sequelize.DataTypes.UUID,
-        //     defaultValue: Sequelize.DataTypes.UUIDV4,
-        // },
         login: {
             type: Sequelize.STRING,
             allowNull: null,
